@@ -231,6 +231,11 @@ int main(int argc, char **argv) {
         unsigned char* data1 = (unsigned char*)malloc(header1.height * header1.width);
         unsigned char* data2 = (unsigned char*)malloc(header2.height * header2.width);
 
+        if (!data1 || !data2) {
+            printf("Error: Cannot allocate memory.\n");
+            exit(1);
+        }
+
         read_pgm_image(f1, header1, data1);
         read_pgm_image(f2, header2, data2);
 
@@ -240,6 +245,12 @@ int main(int argc, char **argv) {
         else {
             printf("The two images are NOT the same :(\n");
         }
+
+        fclose(f1);
+        fclose(f2);
+
+        free(data1);
+        free(data2);
 
         exit(0);
     }
