@@ -139,7 +139,7 @@ static void read_pgm_image(FILE *f, pgm_header_t header, unsigned char *out_imag
     int tmp;
     while (requiredSize--) {
         fscanf(f, "%d", &tmp);
-        *(out_image_2d++) = (char)tmp;
+        *(out_image_2d++) = (unsigned char)tmp;
     }
 }
 
@@ -266,7 +266,7 @@ int main(int argc, char **argv) {
 
     // unsigned char should be enough.
     // TODO: consider if greyscale_max > 255.
-    int memory_disp_unit = sizeof(char);
+    int memory_disp_unit = sizeof(unsigned char);
 
     // Shared memory related.
     // memory_size == memory_units * memory_disp_unit
@@ -447,7 +447,7 @@ int main(int argc, char **argv) {
                 printf("Error opening file %s for writing.\n", output_file_name);
                 while (1) {
                     printf("Do you want to try again? (Y/N): ");
-                    fgets("%s%*c", sizeof(s) / sizeof(char), stdin);
+                    fgets("%s%*c", sizeof(s) / sizeof(unsigned char), stdin);
 
                     if ((s[0] == 'y' || s[0] == 'Y') && s[1] == 0) {
                         break;
