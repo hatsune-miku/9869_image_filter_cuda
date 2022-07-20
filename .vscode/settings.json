@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.json": "jsonc",
+        "__tuple": "c",
+        "array": "c",
+        "vector": "c",
+        "string": "c",
+        "string_view": "c",
+        "algorithm": "c"
+    }
+}
