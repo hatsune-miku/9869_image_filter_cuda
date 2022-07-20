@@ -123,10 +123,9 @@ static pgm_header_t read_pgm_header(FILE *f) {
     return ret;
 }
 
-// Write the pgm (version: P5) header at the position that f is pointing to.
+// Write the pgm (version: P2) header at the position that f is pointing to.
 static void write_pgm_header(FILE* f, pgm_header_t header) {
-    fprintf(f, "P5\n");
-    fprintf(f, "# Created by Zhen Guan\n");
+    fprintf(f, "P2\n");
     fprintf(f, "%d %d\n", header.width, header.height);
     fprintf(f, "%d\n", header.greyscale_max);
 }
