@@ -9,9 +9,13 @@
 //
 
 #include <stdexcept>
+#include <chrono>
+#include <thread>
+
 
 #include "conv/conv.hpp"
 #include "util/array.hpp"
+#include "timing/timing.hpp"
 
 // Convolution on a single pixel.
 // For a NxN picture, there bill be NxN cells running simultaneously.
@@ -60,6 +64,7 @@ __global__ void device_convolution_cell(
             ARRAY2D_AT(output_image_2d, image_width, i, j) = (unsigned char)sum;
         }
     }
+
 }
 
 static void assertCudaError(cudaError_t error) {
@@ -125,6 +130,15 @@ void conv::convolution(
     assertCudaError(cudaMemcpy(input_image_2d_device, input_image_2d, sizeof(unsigned char) * image_width * image_height, cudaMemcpyHostToDevice));
 
     // Launch the kernel.
+
+    float time;
+    cudaEvent_t start;
+    cudaEvent_t stop;
+
+    cudaEventCreate(&start);
+    cudaEventCreate(&stop);
+    cudaEventRecord(start);
+
     device_convolution_cell<<<1, num_workers>>>(
         kernel_2d_device,
         kernel_size,
@@ -135,6 +149,13 @@ void conv::convolution(
         num_workers_sqrt,
         greyscale_max
     );
+
+    cudaEventRecord(stop);
+    cudaEventSynchronize(stop);
+    cudaEventElapsedTime(&time, start, stop);
+    cudaEventDestroy(start);
+    cudaEventDestroy(stop);
+    printf("Time elapsed: %.0fms\n", time);
 
     // Copy output.
     assertCudaError(cudaMemcpy(output_image_2d, output_image_2d_device, sizeof(unsigned char) * image_width * image_height, cudaMemcpyDeviceToHost));

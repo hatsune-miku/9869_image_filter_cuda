@@ -11,3 +11,6 @@ add_executable(
     "src/pgm/pgm.cpp"
     "src/main.cpp"
 )
+
+set_target_properties(conv_gpu PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+set_target_properties(conv_gpu PROPERTIES CUDA_RESOLVE_DEVICE_SYMBOLS ON)

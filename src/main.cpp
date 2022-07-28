@@ -15,7 +15,6 @@
 
 #include "pgm/pgm.hpp"
 #include "conv/conv.hpp"
-#include "timing/timing.hpp"
 
 // The convolution kernel.
 static int g_convolution_kernel_size = conv::CONV_KERNEL_SIZE;
@@ -79,22 +78,17 @@ static void handle_convolution(const char **argv) {
     pgm::pgm_image_read(input_file_fp, header, /* out */ input_image_2d);
 
     printf("Starting convolution...\n");
-
-    long long time_elapsed_milliseconds = time_milliseconds([&] () {
-        conv::convolution(
-            num_workers,
-            g_convolution_kernel_2d,
-            g_convolution_kernel_size,
-            input_image_2d,
-            /* out */ output_image_2d,
-            header.width,
-            header.height,
-            header.greyscale_max
-        );
-    });
-
-    printf("Convolution finished in %lld milliseconds.\n",
-           time_elapsed_milliseconds);
+    conv::convolution(
+        num_workers,
+        g_convolution_kernel_2d,
+        g_convolution_kernel_size,
+        input_image_2d,
+        /* out */ output_image_2d,
+        header.width,
+        header.height,
+        header.greyscale_max
+    );
+    printf("Convolution finished.\n");
 
     // Write the output image to the output file.
     pgm::pgm_header_write(output_file_fp, header);
