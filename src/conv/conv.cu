@@ -10,12 +10,9 @@
 
 #include <stdexcept>
 #include <chrono>
-#include <thread>
-
 
 #include "conv/conv.hpp"
 #include "util/array.hpp"
-#include "timing/timing.hpp"
 
 // Convolution on a single pixel.
 // For a NxN picture, there bill be NxN cells running simultaneously.
